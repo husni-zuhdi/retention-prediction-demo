@@ -1,2 +1,4 @@
+*node_modules/
 *retention-prediction/
 *model/
+.env
