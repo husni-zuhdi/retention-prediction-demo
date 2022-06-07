@@ -1,6 +1,8 @@
 import os
 import json
 import pickle
+# from pyexpat import model
+# import gcsfs
 import numpy as np
 from turtle import update
 from tensorflow.python.keras.models import model_from_json
@@ -96,4 +98,28 @@ def load_model():
     # and load standard_scaler
     with open(os.environ.get("STANDARD_SCALER"), 'rb') as handler:
         sc = pickle.load(handler)
+
+    ## experiment to use gcs
+    ## still in development
+    ## ====================
+    # change your project name
+    # PROJECT_NAME = 'browsing-project'
+    # CREDS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    # MODEL_LAYER = os.environ.get("MODEL_LAYER")
+    # MODEL_WEIGHTS = os.environ.get("MODEL_WEIGHTS")
+    # STANDARD_SCALER = os.environ.get("STANDARD_SCALER")
+
+    # FS = gcsfs.GCSFileSystem(project=PROJECT_NAME,
+    #                         token=CREDS)
+
+    # with FS.open(MODEL_LAYER, 'rb') as layer:
+    #     new_model = model_from_json(layer.read())
+
+    # with FS.open(MODEL_WEIGHTS, 'rb') as weights:
+    #     new_model.load_weights(weights.read())
+    #     new_model.compile(loss='binary_crossentropy', optimizer='adam')
+
+    # with FS.open(STANDARD_SCALER, 'rb') as handler:
+    #     sc = pickle.load(handler)
+    
     return model, sc
