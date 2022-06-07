@@ -5,7 +5,7 @@
 **Use it as reference only!**
 
 ## Stack used
-1. 🤖 Tensorflow 2.8
+1. 🤖 Tensorflow 2.9
 2. 🍾 Flask 2.10
 
 ## Google Cloud Service used
@@ -42,13 +42,46 @@
 5. Test with Postman or CLI
 
 ## ☁️ How to use in Cloud
-### ⚡️ Deploy MySQL Database in Compute Engine
-2. Run `export PROJECT_ID=$(gcloud config get-value project)`
-3. Run `docker build -t gcr.io/$PROJECT_ID/retention-pred:v1.0 .`
-4. Run `gcloud auth configure-docker` and press `Y`
-5. Run `docker push gcr.io/$PROJECT_ID/retention-pred:v1.0`
-6. Run `gcloud run deploy --image gcr.io/$PROJECT_ID/retention-pred:v1.0 --platform managed`
-7. Check your GCP Console > Cloud Run
+### ⚡️ Deploy ML API with Cloud Run
+
+#### ✅ First, let's create our Service account
+> 🚨 This still in development. Please jump to the second step
+
+1. Run `export PROJECT_ID=$(gcloud config get-value project)`
+2. Run `export SA=retention-prediction`
+2. Run this to create `retention-prediction` service account
+```
+gcloud iam service-accounts create $SA \
+    --description="retention-prediction SA" \
+    --display-name="retention-prediction"
+```
+3. Run this to bind service account with `Storage Admin` role
+```
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$SA@$PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/storage.admin"
+```
+4. Run this to get service account key as `key.json`
+```
+gcloud iam service-accounts keys create key.json \
+    --iam-account=$SA@$PROJECT_ID.iam.gserviceaccount.com
+```
+5. Add `s` into the `.env` file
+
+| Variables                      | Function                  | Example       |
+| ------------------------------ |:------------------------: | -------------:|
+| GOOGLE_APPLICATION_CREDENTIALS | your_service_account_path | ./key.json    |
+
+6. 🚨 Keep it secret okay. Don't push your service account key into the github!
+
+
+#### ✅ Then we're ready to deploy our Cloud Run
+
+1. Run `docker build -t gcr.io/$PROJECT_ID/retention-pred:v1.0 .`
+2. Run `gcloud auth configure-docker` and press `Y`
+3. Run `docker push gcr.io/$PROJECT_ID/retention-pred:v1.0`
+4. Run `gcloud run deploy --image gcr.io/$PROJECT_ID/retention-pred:v1.0 --platform managed`
+5. Check your GCP Console > Cloud Run
 
 ## References : 
 
