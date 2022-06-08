@@ -83,6 +83,13 @@ gcloud iam service-accounts keys create key.json \
 4. Run `gcloud run deploy --image gcr.io/$PROJECT_ID/retention-pred:v1.0 --platform managed`
 5. Check your GCP Console > Cloud Run
 
+## Misc
+
+* If you encounter error below, run `sudo apt install python3-tk`
+```
+ModuleNotFoundError: No module named 'tkinter'
+```
+
 ## References : 
 
 [1] https://www.digitalocean.com/community/tutorials/how-to-build-a-deep-learning-model-to-predict-employee-retention-using-keras-and-tensorflow
