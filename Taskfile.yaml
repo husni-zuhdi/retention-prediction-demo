@@ -1,0 +1,27 @@
+version: '3'
+
+vars:
+  PROJECT_NAME:
+    sh: basename $(pwd)
+
+tasks:
+  # Setup environment
+  conda-create:
+    summary: Create conda env.
+    cmds:
+      - conda create -n {{.PROJECT_NAME}} python=3.11.0 ipython
+
+  conda-activate:
+    summary: Activate conda env.
+    cmds:
+      - conda activate {{.PROJECT_NAME}}
+
+  conda-install:
+    summary: Install all python packages for this env.
+    cmds:
+      - pip install -r requirements.txt
+
+  conda-req:
+    summary: Save current conda requirements.
+    cmds:
+      - conda list -e -n {{.PROJECT_NAME}} > requirements.txt
